@@ -9,6 +9,7 @@
 #include <algorithm>
 #include<stack>
 
+
 namespace Day9 {
 	void Solve() {
 		std::vector<std::vector<int>> grid;
