@@ -1,13 +1,13 @@
-#include <vector>
-#include <string>
-#include <fstream>
+#include <algorithm>
+//#include <fstream>
 #include <iostream>
 #include <map>
-#include <set>
 #include <queue>
-#include "aoc_utils.h"
-#include <algorithm>
+#include <set>
 #include<stack>
+//#include <string>
+#include <vector>
+#include "aoc_utils.h"
 
 
 namespace Day9 {
@@ -15,8 +15,8 @@ namespace Day9 {
 		std::vector<std::vector<int>> grid;
 		std::map<int, int> cellvalues;
 		aoc::LoadGridInput("input_day9.txt", grid, cellvalues, true);
-		size_t width = grid[0].size();
-		size_t height = grid.size();
+		const size_t width = grid[0].size();
+		const size_t height = grid.size();
 		std::map<int, std::vector<int>> neighbors;
 		int total_risk = 0;
 		std::vector<int> minlocs;
