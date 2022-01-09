@@ -10,7 +10,7 @@
 #include "aoc_utils.h"
 
 
-namespace Day9 {
+namespace day9 {
 	void Solve() {
 		std::vector<std::vector<int>> grid;
 		std::map<int, int> cellvalues;
@@ -84,7 +84,7 @@ namespace Day9 {
 	}
 }
 
-namespace Day10 {
+namespace day10 {
 	void Solve() {
 		std::vector<std::vector<int>> grid;
 		std::map<int, int> cellvalues;
@@ -134,7 +134,91 @@ namespace Day10 {
 	}
 }
 
+namespace day21
+{
+	class det_die
+	{
+	public:
+		det_die() = delete;
+		det_die(unsigned long long num_sides, unsigned long long num_rolls_per_play)
+			:
+			n_sides(num_sides),
+			n_rpp(num_rolls_per_play),
+			n_mod(n_sides * n_rpp)
+		{}
+		void Reset()
+		{
+			n_played = 0;
+			next_side = 0;
+		}
+		int Play()
+		{
+			n_played++;
+			const int n_thrown_mod = n_played % n_mod;
+			if (cache.find(next_side) != cache.end())
+			{
+				//std::cout << "*";
+				unsigned long long sumrolls = cache[next_side];
+				next_side = (next_side + n_rpp) % (n_sides);
+				return sumrolls;
+			}
+			else
+			{
+				unsigned long long sumrolls = 0;
+				const unsigned long long next_side_old = next_side;
+				for (size_t i = 0; i < n_rpp; ++i)
+				{
+					sumrolls += (next_side + 1);
+					next_side = (next_side + 1) % (n_sides);
+				}
+				cache[next_side_old] = sumrolls;
+				return sumrolls;
+			}
+			return -1;
+		}
+	private:
+		unsigned int n_sides = 10;
+		unsigned long long n_rpp = 3;
+		unsigned long long n_played = 0;
+		unsigned long long n_mod = 30;
+		unsigned long long next_side = 0;
+		std::map<unsigned long long, unsigned long long> cache;
+	};
+	void Solve() {
+		day21::det_die DetDie(100,3);
+		unsigned int p1pos = 10;
+		unsigned int p2pos = 6;
+		unsigned int bsize = 10;
+		unsigned long long p1score = 0;
+		unsigned long long p2score = 0;
+		unsigned long long playval;
+		size_t nrolls = 0;
+		while (true)
+		{
+			playval = DetDie.Play();
+			nrolls+=3;
+			p1pos = (p1pos + playval) % 10;
+			if (p1pos == 0) { p1pos = 10; }
+			p1score += p1pos;
+			if (p1score >= 1000) { break; }
+
+			playval = DetDie.Play();
+			nrolls += 3;
+			p2pos = (p2pos + playval) % 10;
+			if (p2pos == 0) { p2pos = 10; }
+			p2score += p2pos;
+			if (p2score >= 1000) { break; }
+		}
+		std::cout << "Die rolls: " << nrolls << '\n';
+		std::cout << "p1 score : " << p1score << '\n';
+		std::cout << "p2 score : " << p2score << '\n';
+		unsigned long long answer = nrolls * std::min(p1score, p2score);
+		std::cout << "answer   : " << answer << std::endl;
+	}
+}
+
 int main() {
-	//Day9::Solve();
-	Day10::Solve();
+	//day9::Solve();
+	//day10::Solve();
+	day21::Solve();
 }
